@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV Generator — ATS Friendly</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-inner">
+    <div class="logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="#2563EB"/>
+        <rect x="6" y="7" width="16" height="2" rx="1" fill="white"/>
+        <rect x="6" y="11" width="12" height="2" rx="1" fill="white"/>
+        <rect x="6" y="15" width="14" height="2" rx="1" fill="white"/>
+        <rect x="6" y="19" width="10" height="2" rx="1" fill="white"/>
+      </svg>
+      <span>CV Generator</span>
+    </div>
+    <span class="badge-ats">ATS Friendly</span>
+  </div>
+</header>
+
+<!-- STEP INDICATOR -->
+<div class="step-bar">
+  <div class="step-bar-inner">
+    <div class="step active" data-step="1"><span class="step-num">1</span><span class="step-label">Import Data</span></div>
+    <div class="step-line"></div>
+    <div class="step" data-step="2"><span class="step-num">2</span><span class="step-label">Edit CV</span></div>
+    <div class="step-line"></div>
+    <div class="step" data-step="3"><span class="step-num">3</span><span class="step-label">Template</span></div>
+    <div class="step-line"></div>
+    <div class="step" data-step="4"><span class="step-num">4</span><span class="step-label">Download</span></div>
+  </div>
+</div>
+
+<main class="main">
+
+<!-- ═══════════════════════════════════════════════════════════ STEP 1 -->
+<section class="step-content active" id="step-1">
+  <div class="step-header">
+    <h2>Mulai dari mana?</h2>
+    <p>Import data dari LinkedIn atau isi secara manual</p>
+  </div>
+
+  <div class="import-cards">
+    <!-- LinkedIn import -->
+    <div class="import-card" id="card-linkedin">
+      <div class="import-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#0A66C2"/>
+          <text x="20" y="27" text-anchor="middle" fill="white" font-size="18" font-weight="bold" font-family="Arial">in</text>
+        </svg>
+      </div>
+      <h3>Import dari LinkedIn</h3>
+      <p>Upload file ZIP dari LinkedIn data export untuk mengisi CV otomatis.</p>
+      <div class="linkedin-steps">
+        <p class="steps-title">Cara download data LinkedIn:</p>
+        <ol>
+          <li>Buka <strong>LinkedIn</strong> → <strong>Settings &amp; Privacy</strong></li>
+          <li>Pilih <strong>Data Privacy</strong> → <strong>Get a copy of your data</strong></li>
+          <li>Centang <strong>The works</strong> atau pilih data yang ingin diambil</li>
+          <li>Klik <strong>Request archive</strong> (bisa makan 10 menit – 24 jam)</li>
+          <li>Download ZIP yang dikirim ke email, lalu upload di sini</li>
+        </ol>
+      </div>
+      <label class="upload-area" id="upload-area">
+        <input type="file" id="linkedin-file" accept=".zip" hidden>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <span id="upload-label">Klik atau drag &amp; drop file ZIP</span>
+      </label>
+      <button class="btn btn-primary" id="btn-parse-linkedin" disabled>
+        Proses File LinkedIn
+      </button>
+    </div>
+
+    <!-- Manual entry -->
+    <div class="import-card" id="card-manual">
+      <div class="import-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#10B981"/>
+          <path d="M12 14h16M12 20h16M12 26h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3>Isi Manual</h3>
+      <p>Isi semua informasi CV Anda secara langsung lewat form yang tersedia.</p>
+      <div class="manual-features">
+        <div class="feature-item"><span class="check">✓</span> Form lengkap semua bagian CV</div>
+        <div class="feature-item"><span class="check">✓</span> Tambah/hapus pengalaman &amp; pendidikan</div>
+        <div class="feature-item"><span class="check">✓</span> Organisasi skills per kategori</div>
+        <div class="feature-item"><span class="check">✓</span> Preview real-time</div>
+      </div>
+      <button class="btn btn-success" id="btn-manual">
+        Mulai Isi Manual
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ STEP 2 -->
+<section class="step-content" id="step-2">
+  <div class="step-header">
+    <h2>Edit CV Anda</h2>
+    <p>Isi atau edit semua bagian CV. Semua perubahan tersimpan otomatis.</p>
+  </div>
+
+  <div class="editor-layout">
+    <!-- FORM PANEL -->
+    <div class="form-panel">
+      <div class="tabs">
+        <button class="tab active" data-tab="personal">Profil</button>
+        <button class="tab" data-tab="experience">Pengalaman</button>
+        <button class="tab" data-tab="education">Pendidikan</button>
+        <button class="tab" data-tab="skills">Skills</button>
+        <button class="tab" data-tab="extras">Lainnya</button>
+      </div>
+
+      <!-- Tab: Personal -->
+      <div class="tab-content active" id="tab-personal">
+        <div class="form-section">
+          <h3 class="section-title">Informasi Pribadi</h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Nama Lengkap *</label>
+              <input type="text" id="name" placeholder="Ahmad Al-Khatami" autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" id="email" placeholder="ahmad@email.com" autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label>Nomor Telepon *</label>
+              <input type="tel" id="phone" placeholder="+62 812 3456 7890">
+            </div>
+            <div class="form-group">
+              <label>Lokasi</label>
+              <input type="text" id="location" placeholder="Jakarta, Indonesia">
+            </div>
+            <div class="form-group">
+              <label>URL LinkedIn</label>
+              <input type="url" id="linkedin" placeholder="https://linkedin.com/in/username">
+            </div>
+            <div class="form-group">
+              <label>Website / Portfolio</label>
+              <input type="url" id="website" placeholder="https://portfolio.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Professional Summary</h3>
+          <p class="hint">Ringkasan 2-4 kalimat tentang keahlian dan tujuan karier Anda. Ini bagian pertama yang dibaca rekruter.</p>
+          <textarea id="summary" rows="5" placeholder="Contoh: Software Engineer berpengalaman 5 tahun dalam pengembangan aplikasi web menggunakan Python dan JavaScript. Memiliki rekam jejak membangun sistem skala besar dan memimpin tim hingga 8 orang. Passionate dalam menghadirkan solusi yang efisien dan berdampak nyata."></textarea>
+          <div class="char-counter"><span id="summary-count">0</span> kata</div>
+        </div>
+      </div>
+
+      <!-- Tab: Experience -->
+      <div class="tab-content" id="tab-experience">
+        <div class="form-section">
+          <div class="section-header-row">
+            <h3 class="section-title">Pengalaman Kerja</h3>
+            <button class="btn-add" onclick="addExperience()">+ Tambah</button>
+          </div>
+          <p class="hint">Urutkan dari yang terbaru. Gunakan bullet point dengan pencapaian terukur (angka, persentase).</p>
+          <div id="experience-list"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Education -->
+      <div class="tab-content" id="tab-education">
+        <div class="form-section">
+          <div class="section-header-row">
+            <h3 class="section-title">Riwayat Pendidikan</h3>
+            <button class="btn-add" onclick="addEducation()">+ Tambah</button>
+          </div>
+          <div id="education-list"></div>
+        </div>
+      </div>
+
+      <!-- Tab: Skills -->
+      <div class="tab-content" id="tab-skills">
+        <div class="form-section">
+          <h3 class="section-title">Skills</h3>
+          <p class="hint">Ketik skill lalu tekan <kbd>Enter</kbd> atau koma untuk menambahkan. Anda bisa mengelompokkan per kategori.</p>
+
+          <div class="skill-mode-toggle">
+            <button class="mode-btn active" id="mode-flat" onclick="setSkillMode('flat')">Daftar Biasa</button>
+            <button class="mode-btn" id="mode-category" onclick="setSkillMode('category')">Per Kategori</button>
+          </div>
+
+          <div id="skill-flat-mode">
+            <div class="skill-input-row">
+              <input type="text" id="skill-input" placeholder="Ketik skill lalu Enter..." autocomplete="off">
+            </div>
+            <div class="skill-tags" id="skill-tags"></div>
+          </div>
+
+          <div id="skill-category-mode" style="display:none">
+            <div id="skill-categories"></div>
+            <button class="btn-add" onclick="addSkillCategory()">+ Tambah Kategori</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Extras -->
+      <div class="tab-content" id="tab-extras">
+        <!-- Certifications -->
+        <div class="form-section">
+          <div class="section-header-row">
+            <h3 class="section-title">Sertifikasi</h3>
+            <button class="btn-add" onclick="addCertification()">+ Tambah</button>
+          </div>
+          <div id="certifications-list"></div>
+        </div>
+
+        <!-- Projects -->
+        <div class="form-section">
+          <div class="section-header-row">
+            <h3 class="section-title">Proyek</h3>
+            <button class="btn-add" onclick="addProject()">+ Tambah</button>
+          </div>
+          <div id="projects-list"></div>
+        </div>
+
+        <!-- Languages -->
+        <div class="form-section">
+          <div class="section-header-row">
+            <h3 class="section-title">Bahasa</h3>
+            <button class="btn-add" onclick="addLanguage()">+ Tambah</button>
+          </div>
+          <div id="languages-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW PANEL -->
+    <div class="preview-panel">
+      <div class="preview-toolbar">
+        <span class="preview-title">Preview CV</span>
+        <button class="btn-refresh" onclick="renderPreview()">Refresh</button>
+      </div>
+      <div class="preview-wrap">
+        <div class="cv-preview" id="cv-preview">
+          <p class="preview-empty">Isi form di sebelah kiri untuk melihat preview CV Anda</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-nav">
+    <button class="btn btn-outline" onclick="goStep(1)">← Kembali</button>
+    <button class="btn btn-primary" onclick="goStep(3)">Pilih Template →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ STEP 3 -->
+<section class="step-content" id="step-3">
+  <div class="step-header">
+    <h2>Pilih Template</h2>
+    <p>Semua template 100% ATS-friendly — tidak ada kolom, grafik, atau elemen yang mempersulit scanner</p>
+  </div>
+
+  <div class="template-grid">
+    <div class="template-card selected" data-template="classic" onclick="selectTemplate('classic')">
+      <div class="template-thumb classic-thumb">
+        <div class="thumb-name-bar"></div>
+        <div class="thumb-accent-bar"></div>
+        <div class="thumb-lines">
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-section-bar"></div>
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-line short"></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <strong>Classic Blue</strong>
+        <span>Profesional, cocok untuk semua industri</span>
+      </div>
+      <div class="template-check">✓</div>
+    </div>
+
+    <div class="template-card" data-template="modern" onclick="selectTemplate('modern')">
+      <div class="template-thumb modern-thumb">
+        <div class="thumb-name-bar"></div>
+        <div class="thumb-accent-bar modern-accent"></div>
+        <div class="thumb-lines">
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-section-bar modern-section"></div>
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-line short"></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <strong>Modern Purple</strong>
+        <span>Segar &amp; contemporary, ideal untuk tech/creative</span>
+      </div>
+      <div class="template-check">✓</div>
+    </div>
+
+    <div class="template-card" data-template="minimal" onclick="selectTemplate('minimal')">
+      <div class="template-thumb minimal-thumb">
+        <div class="thumb-name-bar minimal-name"></div>
+        <div class="thumb-accent-bar minimal-accent"></div>
+        <div class="thumb-lines">
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-section-bar minimal-section"></div>
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-line short"></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <strong>Minimal</strong>
+        <span>Hitam putih bersih, paling mudah dibaca ATS</span>
+      </div>
+      <div class="template-check">✓</div>
+    </div>
+
+    <div class="template-card" data-template="executive" onclick="selectTemplate('executive')">
+      <div class="template-thumb executive-thumb">
+        <div class="thumb-name-bar executive-name"></div>
+        <div class="thumb-accent-bar executive-accent"></div>
+        <div class="thumb-lines">
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-section-bar executive-section"></div>
+          <div class="thumb-line long"></div>
+          <div class="thumb-line medium"></div>
+          <div class="thumb-line short"></div>
+        </div>
+      </div>
+      <div class="template-info">
+        <strong>Executive</strong>
+        <span>Elegan dengan aksen emas, ideal untuk managerial</span>
+      </div>
+      <div class="template-check">✓</div>
+    </div>
+  </div>
+
+  <div class="step-nav">
+    <button class="btn btn-outline" onclick="goStep(2)">← Kembali Edit</button>
+    <button class="btn btn-primary" onclick="goStep(4)">Lihat &amp; Download →</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ STEP 4 -->
+<section class="step-content" id="step-4">
+  <div class="step-header">
+    <h2>Preview &amp; Download</h2>
+    <p>Periksa CV Anda, cek skor ATS, lalu download</p>
+  </div>
+
+  <div class="download-layout">
+    <!-- ATS Score -->
+    <div class="ats-panel">
+      <div class="ats-score-ring">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#E5E7EB" stroke-width="10"/>
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#2563EB" stroke-width="10"
+                  stroke-linecap="round" stroke-dasharray="326.7"
+                  stroke-dashoffset="326.7" id="ats-ring"
+                  transform="rotate(-90 60 60)"/>
+          <text x="60" y="55" text-anchor="middle" font-size="26" font-weight="bold" fill="#1E3A5F" id="ats-score-text">—</text>
+          <text x="60" y="72" text-anchor="middle" font-size="10" fill="#64748B">ATS Score</text>
+        </svg>
+      </div>
+
+      <div class="ats-label" id="ats-label">Belum dicek</div>
+
+      <button class="btn btn-outline full-width" id="btn-ats-check" onclick="checkATS()">
+        Cek Skor ATS
+      </button>
+
+      <div id="ats-result" style="display:none">
+        <div id="ats-issues"></div>
+        <div id="ats-tips"></div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="download-section">
+        <h4>Download CV</h4>
+        <button class="btn btn-primary full-width" onclick="downloadCV('pdf')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Download PDF
+        </button>
+        <button class="btn btn-outline full-width mt-8" onclick="downloadCV('docx')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Download Word (.docx)
+        </button>
+        <p class="download-hint">PDF: untuk dikirim via email<br>DOCX: untuk diupload ke portal rekrutmen</p>
+      </div>
+    </div>
+
+    <!-- Final Preview -->
+    <div class="final-preview-wrap">
+      <div class="cv-preview final" id="cv-preview-final"></div>
+    </div>
+  </div>
+
+  <div class="step-nav">
+    <button class="btn btn-outline" onclick="goStep(3)">← Ubah Template</button>
+    <button class="btn btn-outline" onclick="goStep(2)">Edit CV Lagi</button>
+  </div>
+</section>
+
+</main>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="toast"></div>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loading" style="display:none">
+  <div class="spinner"></div>
+  <p id="loading-text">Memproses...</p>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
