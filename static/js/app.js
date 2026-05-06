@@ -623,7 +623,7 @@ async function downloadCV(format) {
 async function parseLinkedIn(file) {
   const formData = new FormData();
   formData.append('file', file);
-  showLoading('Memproses data LinkedIn...');
+  showLoading('Memproses data LinkedIn ZIP...');
   try {
     const res = await fetch('/api/parse-linkedin', { method: 'POST', body: formData });
     const json = await res.json();
@@ -634,6 +634,51 @@ async function parseLinkedIn(file) {
       showToast('Data LinkedIn berhasil diimport!', 'success');
     } else {
       showToast(json.error || 'Gagal memproses file', 'error');
+    }
+  } catch (e) {
+    hideLoading();
+    showToast('Error: ' + e.message, 'error');
+  }
+}
+
+async function parseLinkedInPDF(file) {
+  const formData = new FormData();
+  formData.append('file', file);
+  showLoading('Membaca PDF LinkedIn...');
+  try {
+    const res = await fetch('/api/parse-linkedin-pdf', { method: 'POST', body: formData });
+    const json = await res.json();
+    hideLoading();
+    if (json.success) {
+      populateForm(json.data);
+      goStep(2);
+      const name = json.data.personal?.name;
+      showToast(`${name ? name + ' — d' : 'D'}ata berhasil diimport dari PDF!`, 'success');
+    } else {
+      showToast(json.error || 'Gagal memproses PDF', 'error');
+    }
+  } catch (e) {
+    hideLoading();
+    showToast('Error: ' + e.message, 'error');
+  }
+}
+
+async function parseLinkedInText(text) {
+  showLoading('Menganalisis teks LinkedIn...');
+  try {
+    const res = await fetch('/api/parse-text', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+    const json = await res.json();
+    hideLoading();
+    if (json.success) {
+      populateForm(json.data);
+      goStep(2);
+      showToast('Teks LinkedIn berhasil diproses!', 'success');
+    } else {
+      showToast(json.error || 'Gagal memproses teks', 'error');
     }
   } catch (e) {
     hideLoading();
@@ -682,7 +727,7 @@ document.getElementById('skill-input').addEventListener('keydown', function(e) {
   }
 });
 
-// ── FILE UPLOAD (LinkedIn) ────────────────────────────────────
+// ── FILE UPLOAD: LinkedIn ZIP ─────────────────────────────────
 const uploadArea = document.getElementById('upload-area');
 const fileInput  = document.getElementById('linkedin-file');
 const parseBtn   = document.getElementById('btn-parse-linkedin');
@@ -713,6 +758,52 @@ uploadArea.addEventListener('drop', e => {
 
 parseBtn.addEventListener('click', () => {
   if (fileInput.files[0]) parseLinkedIn(fileInput.files[0]);
+});
+
+// ── FILE UPLOAD: LinkedIn PDF ─────────────────────────────────
+const uploadAreaPdf = document.getElementById('upload-area-pdf');
+const fileInputPdf  = document.getElementById('linkedin-pdf-file');
+const parsePdfBtn   = document.getElementById('btn-parse-pdf');
+
+fileInputPdf.addEventListener('change', function() {
+  if (this.files[0]) {
+    document.getElementById('upload-label-pdf').textContent = this.files[0].name;
+    uploadAreaPdf.classList.add('file-ready');
+    parsePdfBtn.disabled = false;
+  }
+});
+
+uploadAreaPdf.addEventListener('dragover', e => { e.preventDefault(); uploadAreaPdf.classList.add('dragover'); });
+uploadAreaPdf.addEventListener('dragleave', () => uploadAreaPdf.classList.remove('dragover'));
+uploadAreaPdf.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadAreaPdf.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.pdf')) {
+    fileInputPdf.files = e.dataTransfer.files;
+    document.getElementById('upload-label-pdf').textContent = file.name;
+    uploadAreaPdf.classList.add('file-ready');
+    parsePdfBtn.disabled = false;
+  } else {
+    showToast('Harap drop file .pdf dari LinkedIn', 'error');
+  }
+});
+
+parsePdfBtn.addEventListener('click', () => {
+  if (fileInputPdf.files[0]) parseLinkedInPDF(fileInputPdf.files[0]);
+});
+
+// ── PASTE TEXT ────────────────────────────────────────────────
+const pasteTextArea = document.getElementById('paste-text');
+const parseTextBtn  = document.getElementById('btn-parse-text');
+
+pasteTextArea.addEventListener('input', function() {
+  parseTextBtn.disabled = this.value.trim().length < 20;
+});
+
+parseTextBtn.addEventListener('click', () => {
+  const text = pasteTextArea.value.trim();
+  if (text) parseLinkedInText(text);
 });
 
 document.getElementById('btn-manual').addEventListener('click', () => {

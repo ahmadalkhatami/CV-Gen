@@ -135,21 +135,38 @@ body {
 }
 
 /* ── STEP 1: IMPORT CARDS ─────────────────────────────────── */
-.import-cards {
+.import-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  max-width: 900px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 960px;
   margin: 0 auto;
 }
 .import-card {
   background: var(--white);
   border: 2px solid var(--border);
   border-radius: var(--radius);
-  padding: 28px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
+  position: relative;
+}
+.import-card--highlight {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+}
+.import-card-badge {
+  position: absolute;
+  top: -12px;
+  left: 16px;
+  background: var(--blue);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: .02em;
 }
 .import-icon { display: flex; }
 .import-card h3 { font-size: 18px; font-weight: 700; }
@@ -724,7 +741,7 @@ kbd {
   .download-layout { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
-  .import-cards { grid-template-columns: 1fr; }
+  .import-grid { grid-template-columns: 1fr; }
   .template-grid { grid-template-columns: repeat(2, 1fr); }
   .form-grid-2, .item-form-grid { grid-template-columns: 1fr; }
   .main { padding: 16px 14px 48px; }

@@ -43,45 +43,106 @@
 <section class="step-content active" id="step-1">
   <div class="step-header">
     <h2>Mulai dari mana?</h2>
-    <p>Import data dari LinkedIn atau isi secara manual</p>
+    <p>Pilih salah satu cara import — semuanya gratis dan data tidak keluar dari komputer Anda</p>
   </div>
 
-  <div class="import-cards">
-    <!-- LinkedIn import -->
-    <div class="import-card" id="card-linkedin">
+  <div class="import-grid">
+
+    <!-- ① LinkedIn PDF (INSTAN) -->
+    <div class="import-card import-card--highlight" id="card-pdf">
+      <div class="import-card-badge">⚡ Paling Cepat</div>
       <div class="import-icon">
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
           <rect width="40" height="40" rx="8" fill="#0A66C2"/>
           <text x="20" y="27" text-anchor="middle" fill="white" font-size="18" font-weight="bold" font-family="Arial">in</text>
         </svg>
       </div>
-      <h3>Import dari LinkedIn</h3>
-      <p>Upload file ZIP dari LinkedIn data export untuk mengisi CV otomatis.</p>
+      <h3>LinkedIn Profile PDF</h3>
+      <p>Download PDF profil Anda langsung dari halaman LinkedIn — <strong>selesai dalam 5 detik</strong>, tidak perlu menunggu email.</p>
       <div class="linkedin-steps">
-        <p class="steps-title">Cara download data LinkedIn:</p>
+        <p class="steps-title">Cara download (5 detik):</p>
+        <ol>
+          <li>Buka profil LinkedIn Anda</li>
+          <li>Klik tombol <strong>More</strong> (···) di bawah foto profil</li>
+          <li>Pilih <strong>Save to PDF</strong></li>
+          <li>Upload file PDF yang terdownload di sini</li>
+        </ol>
+      </div>
+      <label class="upload-area" id="upload-area-pdf">
+        <input type="file" id="linkedin-pdf-file" accept=".pdf" hidden>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <span id="upload-label-pdf">Klik atau drag &amp; drop file PDF</span>
+      </label>
+      <button class="btn btn-primary" id="btn-parse-pdf" disabled>
+        Proses PDF LinkedIn
+      </button>
+    </div>
+
+    <!-- ② Paste Teks (INSTAN) -->
+    <div class="import-card" id="card-paste">
+      <div class="import-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#7C3AED"/>
+          <path d="M14 12h12M14 18h12M14 24h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <rect x="10" y="8" width="20" height="24" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <h3>Paste Teks LinkedIn</h3>
+      <p>Buka profil LinkedIn Anda, pilih semua teks (<kbd>Ctrl+A</kbd>), copy, lalu paste di sini. <strong>Instan.</strong></p>
+      <div class="linkedin-steps">
+        <p class="steps-title">Cara copy teks profil:</p>
+        <ol>
+          <li>Buka profil LinkedIn Anda di browser</li>
+          <li>Klik di area profil, tekan <kbd>Ctrl+A</kbd> → <kbd>Ctrl+C</kbd></li>
+          <li>Atau copy bagian-bagian yang ingin diimport</li>
+          <li>Paste di kotak teks di bawah ini</li>
+        </ol>
+      </div>
+      <textarea id="paste-text" rows="5" placeholder="Paste teks dari profil LinkedIn Anda di sini...&#10;&#10;Contoh:&#10;Ahmad Al-Khatami&#10;Senior Software Engineer at PT Contoh&#10;Jakarta, Indonesia&#10;..."></textarea>
+      <button class="btn btn-primary" id="btn-parse-text" disabled>
+        Proses Teks LinkedIn
+      </button>
+    </div>
+
+    <!-- ③ LinkedIn ZIP (lengkap tapi lambat) -->
+    <div class="import-card" id="card-linkedin">
+      <div class="import-icon">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#0A66C2"/>
+          <path d="M20 10v12M20 22l-4-4M20 22l4-4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 28h16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h3>LinkedIn Data Export (ZIP)</h3>
+      <p>Data paling lengkap — termasuk semua koneksi, endorsement, dll. Butuh <strong>10 menit – 24 jam</strong> untuk diproses LinkedIn.</p>
+      <div class="linkedin-steps">
+        <p class="steps-title">Cara download (10 menit – 24 jam):</p>
         <ol>
           <li>Buka <strong>LinkedIn</strong> → <strong>Settings &amp; Privacy</strong></li>
           <li>Pilih <strong>Data Privacy</strong> → <strong>Get a copy of your data</strong></li>
-          <li>Centang <strong>The works</strong> atau pilih data yang ingin diambil</li>
-          <li>Klik <strong>Request archive</strong> (bisa makan 10 menit – 24 jam)</li>
-          <li>Download ZIP yang dikirim ke email, lalu upload di sini</li>
+          <li>Klik <strong>Request archive</strong> → tunggu email dari LinkedIn</li>
+          <li>Download ZIP dari email, lalu upload di sini</li>
         </ol>
       </div>
       <label class="upload-area" id="upload-area">
         <input type="file" id="linkedin-file" accept=".zip" hidden>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.5">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="17 8 12 3 7 8"/>
           <line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
         <span id="upload-label">Klik atau drag &amp; drop file ZIP</span>
       </label>
-      <button class="btn btn-primary" id="btn-parse-linkedin" disabled>
-        Proses File LinkedIn
+      <button class="btn btn-outline" id="btn-parse-linkedin" disabled>
+        Proses ZIP LinkedIn
       </button>
     </div>
 
-    <!-- Manual entry -->
+    <!-- ④ Manual -->
     <div class="import-card" id="card-manual">
       <div class="import-icon">
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
@@ -90,7 +151,7 @@
         </svg>
       </div>
       <h3>Isi Manual</h3>
-      <p>Isi semua informasi CV Anda secara langsung lewat form yang tersedia.</p>
+      <p>Isi semua informasi langsung lewat form. Cocok jika tidak punya akun LinkedIn atau ingin CV dari nol.</p>
       <div class="manual-features">
         <div class="feature-item"><span class="check">✓</span> Form lengkap semua bagian CV</div>
         <div class="feature-item"><span class="check">✓</span> Tambah/hapus pengalaman &amp; pendidikan</div>
@@ -101,6 +162,7 @@
         Mulai Isi Manual
       </button>
     </div>
+
   </div>
 </section>
 

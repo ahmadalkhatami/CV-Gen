@@ -32,6 +32,43 @@ def parse_linkedin():
         return jsonify({'error': f'Gagal memproses file LinkedIn: {str(e)}'}), 500
 
 
+@app.route('/api/parse-linkedin-pdf', methods=['POST'])
+def parse_linkedin_pdf():
+    from utils.linkedin_text_parser import parse_pdf
+    if 'file' not in request.files:
+        return jsonify({'error': 'Tidak ada file yang diupload'}), 400
+
+    file = request.files['file']
+    if not file.filename.lower().endswith('.pdf'):
+        return jsonify({'error': 'Harap upload file PDF dari LinkedIn'}), 400
+
+    try:
+        data = parse_pdf(file)
+        from utils.translator import translate_cv_data
+        data = translate_cv_data(data)
+        return jsonify({'success': True, 'data': data})
+    except RuntimeError as e:
+        return jsonify({'error': str(e)}), 500
+    except Exception as e:
+        return jsonify({'error': f'Gagal memproses PDF: {str(e)}'}), 500
+
+
+@app.route('/api/parse-text', methods=['POST'])
+def parse_text():
+    from utils.linkedin_text_parser import parse_text as do_parse
+    body = request.json
+    if not body or not body.get('text', '').strip():
+        return jsonify({'error': 'Tidak ada teks yang diberikan'}), 400
+
+    try:
+        data = do_parse(body['text'])
+        from utils.translator import translate_cv_data
+        data = translate_cv_data(data)
+        return jsonify({'success': True, 'data': data})
+    except Exception as e:
+        return jsonify({'error': f'Gagal memproses teks: {str(e)}'}), 500
+
+
 @app.route('/api/generate-pdf', methods=['POST'])
 def generate_pdf():
     from utils.pdf_generator import PDFGenerator
